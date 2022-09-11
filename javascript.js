@@ -5,11 +5,30 @@ const divide = (a, b) => a / b;
 const nothing = (a, b) => a;
 
 operate = function(){
-    a = op(a, b);
+    a = op(aSign*a, bSign*b);
     console.log("ans = ", parseFloat(a.toFixed(4)));
     op = nothing;
     b = null;
+    bSign = 1;
     decimalPlaces = 0;
+}
+
+clearAll = function(){
+    a = 0;
+    aSign = 1;
+    b = null;
+    bSign = 1;
+    op = nothing;
+    decimalPlaces = 0;
+}
+
+clear = function(){
+    decimalPlaces = 0;
+    if(op != nothing){
+        b = 0;
+    }else{
+        a = 0;
+    }
 }
 
 setOperator = function(func){
@@ -17,6 +36,14 @@ setOperator = function(func){
     decimalPlaces = 0;
     if(b != null){
         operate();
+    }
+}
+
+setSign = function(){
+    if(op != nothing){
+        bSign *= -1;
+    }else{
+        aSign *= -1;
     }
 }
 
@@ -32,7 +59,7 @@ buildNumber = function(digit){
             b = b + digit * 10**(-decimalPlaces)
             decimalPlaces += 1;
         }
-        console.log("b = ", b);
+        console.log("b = ", bSign*b);
     }else{
         if(decimalPlaces == 0){
             a = 10*a + digit;
@@ -40,11 +67,35 @@ buildNumber = function(digit){
             a = a + digit * 10**(-decimalPlaces)
             decimalPlaces += 1;
         }
-        console.log("a = ", a);
+        console.log("a = ", aSign*a);
+    }
+}
+
+deleteDigit = function(){
+    if(op != nothing){
+        if(decimalPlaces == 0){
+            b = Math.floor(b/10);
+        }else{
+            b = Math.floor(b*10)/10
+            decimalPlaces -= 1;
+        }
+        console.log("b = ", bSign*b);
+    }
+    else{
+        if(decimalPlaces == 0){
+            a = Math.floor(a/10);
+        }else{
+            a = Math.floor(a*10)/10
+            decimalPlaces -= 1;
+        }
+        console.log("a = ", aSign*a);
     }
 }
 
 var a = 0;
+var aSign = 1;
 var b = null;
+var bSign = 1;
 var op = nothing;
 var decimalPlaces = 0;
+var previousResult = 0;
