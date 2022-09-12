@@ -22,12 +22,17 @@ clearAll = function(){
     decimalPlaces = 0;
 }
 
-clear = function(){
+clearCurrent = function(){
     decimalPlaces = 0;
+    console.log("op = ", op);
     if(op != nothing){
         b = 0;
+        bSign = 1;
+        console.log("b = ", b);
     }else{
         a = 0;
+        aSign = 1;
+        console.log("a = ", a);
     }
 }
 

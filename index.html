@@ -9,31 +9,33 @@
     <title>Document</title>
 </head>
 <body>
-    <p>Placeholer Text</p>
-    <input type="button" onclick="buildNumber(7)" value="7">
-    <input type="button" onclick="buildNumber(8)" value="8">
-    <input type="button" onclick="buildNumber(9)" value="9">
-    <input type="button" onclick="setSign()" value="+/-">
-    <br><br>
-    <input type="button" onclick="buildNumber(4)" value="4">
-    <input type="button" onclick="buildNumber(5)" value="5">
-    <input type="button" onclick="buildNumber(6)" value="6">
-    <input type="button" onclick="deleteDigit()" value="bk">
-    <br><br>
-    <input type="button" onclick="buildNumber(1)" value="1">
-    <input type="button" onclick="buildNumber(2)" value="2">
-    <input type="button" onclick="buildNumber(3)" value="3">
-    <br><br>
-    <input type="button" onclick="startDecimal()" value = " .">
-    <input type="button" onclick="buildNumber(0)" value="0">
-    <input type="button" onclick="operate()" value="=">
-    
-    <br><br>
+    <div class="calculator">
+        <input type="button" class="button other" onclick="clearAll()" value="AC">
+        <input type="button" class="button other" onclick="clearCurrent()" value="C">
+        <input type="button" class="button digit" onclick="setSign()" value="+/-">
+        <input type="button" class="button op" onclick="setOperator(add)" value="+"> 
 
-    <input type="button" onclick="setOperator(add)" value="+"> 
-    <input type="button" onclick="setOperator(subtract)" value="-"> 
-    <input type="button" onclick="setOperator(multiply)" value="x"> 
-    <input type="button" onclick="setOperator(divide)" value="/"> 
+        <input type="button" class="button digit" onclick="buildNumber(7)" value="7">
+        <input type="button" class="button digit" onclick="buildNumber(8)" value="8">
+        <input type="button" class="button digit" onclick="buildNumber(9)" value="9">
+        <input type="button" class="button op" onclick="setOperator(subtract)" value="-"> 
+        
+        <input type="button" class="button digit" onclick="buildNumber(4)" value="4">
+        <input type="button" class="button digit" onclick="buildNumber(5)" value="5">
+        <input type="button" class="button digit" onclick="buildNumber(6)" value="6">
+        <input type="button" class="button op" onclick="setOperator(multiply)" value="x"> 
+
+        
+        <input type="button" class="button digit" onclick="buildNumber(1)" value="1">
+        <input type="button" class="button digit" onclick="buildNumber(2)" value="2">
+        <input type="button" class="button digit" onclick="buildNumber(3)" value="3">
+        <input type="button" class="button op" onclick="setOperator(divide)" value="/">
+
+        <input type="button" class="button digit" onclick="buildNumber(0)"  value="0">
+        <input type="button" class="button digit" onclick="startDecimal()" value = " .">
+        <input type="button" class="button large op" onclick="operate()" value="   =   ">
+
+    </div>
     
 </body>
 </html>
