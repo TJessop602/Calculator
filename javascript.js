@@ -19,7 +19,6 @@ clearAll = function(){
     a = '';
     b = '';
     op = nothing;
-
 }
 
 clearCurrent = function(){
