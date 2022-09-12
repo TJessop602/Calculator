@@ -22,7 +22,7 @@ body{
 
 .button{
     border: 2px solid gray;
-    box-shadow: 0 3px 3px ;
+    box-shadow: 0 3px 3px; 
     border-radius: 20px;
     padding: 0.5em;
     margin: 0.5em;

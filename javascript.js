@@ -15,7 +15,7 @@ operate = function(){
     b = '';
 }
 
-clearAll = function(){
+clearAll = function(){ 
     a = '';
     b = '';
     op = nothing;
