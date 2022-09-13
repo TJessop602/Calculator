@@ -1,5 +1,5 @@
 *{
-    margin: 20px;
+    margin: 0;
     padding: 0;
 }
 
@@ -9,6 +9,7 @@ body{
     align-items: center;
     flex-direction: column;
     background-color: antiquewhite;
+    margin: 20px;
 }
 
 .calculator{
@@ -19,14 +20,34 @@ body{
 }
 
 .screen{
-    height:100px;
-    width: 400px;
     margin: 0.5em;
     padding: 0.5em;
     margin-bottom: 1em;
     background-color: silver;
     border-radius: 10px;
     box-shadow: black inset 0 1px 1px 1px;
+}
+
+.lower{
+    height: 80px; 
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 48px;
+    font-family: monospace;
+    display:flex;
+    justify-content: right;
+    align-items:center;
+}
+
+.upper{
+    height: 40px;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 24px;
+    font-family: monospace;
+    display:flex;
+    justify-content: right;
+    align-items:flex-end;
 }
 
 .inputs{
