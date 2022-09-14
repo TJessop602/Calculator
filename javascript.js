@@ -1,74 +1,72 @@
-add = (a, b) => a + b;
-multiply = (a, b) => a * b;
-subtract = (a, b) => a - b;
-divide = (a, b) => a / b;
-nothing = (a, b) => a;
+const add = (a, b) => a + b;
+const multiply = (a, b) => a * b;
+const subtract = (a, b) => a - b;
+const divide = (a, b) => a / b;
+const nothing = (a, b) => a;
 
-var a = '';
-var b = '';
+window.addEventListener('click',(event) => {
+    updateScreen();
+    console.log("click");
+})
+
+const upperScreen = document.getElementById("upper");
+const lowerScreen = document.getElementById("lower");
+
+var active = '';
+var stored = '';
 var op = nothing;
 
+updateScreen = function(){
+    lowerScreen.textContent = active;
+    upperScreen.textContent = stored;
+}
+
 operate = function(){
-    a = String(op(Number(a), Number(b)));
-    console.log("ans = ", a);
+    stored = String(op(Number(stored), Number(active)));
+    console.log("ans = ", active);
     op = nothing;
-    b = '';
+}
+
+storeActive = function(){
+    stored = active;
+    active = '';
 }
 
 clearAll = function(){ 
-    a = '';
-    b = '';
+    stored = '';
+    active = ''; 
+    result = '';
     op = nothing;
 }
 
 clearCurrent = function(){
-    console.log("op = ", op);
-    if(op != nothing){
-        b = '';
-        console.log("b = ", b);
-    }else{
-        a = '';
-        console.log("a = ", a);
-    }
+    active = ''; 
 }
 
 setOperator = function(func){
-    op = func;
-    if(b != ''){
+    if(stored == ''){
+        storeActive();
+    }else if(active != ''){
         operate();
     }
+    op = func;
+    console.log("op = ", op);
 }
 
 setSign = function(){
-    if(op != nothing){
-        if(b[0] != '-'){
-            b = '-' + b;
-        }else{
-            b = b.slice(1);
-        }
+    if(active[0] != '-'){
+        active = '-' + active;
     }else{
-        if(a[0] != '-'){
-            a = '-' + a;
-        }else{
-            a = a.slice(1);
-        }
+        active = active.slice(1);
     }
 }
 
 buildNumber = function(digit){
-    if(op != nothing){
-        b += digit;
-    }else{
-        a += digit;
-    }
+    active += digit;
+    console.log(active);
 }
 
 deleteDigit = function(){
-    if(op != nothing){
-        b = b.slice(0,-1);
-    }
-    else{
-        a = a.slice(0,-1);
-    }
+    active = active.slice(0,-1);
 }
 
