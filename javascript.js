@@ -4,69 +4,93 @@ const subtract = (a, b) => a - b;
 const divide = (a, b) => a / b;
 const nothing = (a, b) => a;
 
+const upperScreen = document.getElementById("upper");
+const lowerScreen = document.getElementById("lower");
+
 window.addEventListener('click',(event) => {
     updateScreen();
     console.log("click");
 })
 
-const upperScreen = document.getElementById("upper");
-const lowerScreen = document.getElementById("lower");
-
-var active = '';
-var stored = '';
+var lowerScreenNumber = '';
+var storedNumber = '';
+var equation = '';
 var op = nothing;
+var opSymbol = '';
 
 updateScreen = function(){
-    lowerScreen.textContent = active;
-    upperScreen.textContent = stored;
+    lowerScreen.textContent = lowerScreenNumber;
+    upperScreen.textContent = equation;
 }
 
-operate = function(){
-    stored = String(op(Number(stored), Number(active)));
-    console.log("ans = ", active);
-    op = nothing;
+operate = function(pressedEquals = false){
+    let answer = String(op(Number(storedNumber), Number(lowerScreenNumber)));
+    if(!pressedEquals){
+        storedNumber = answer;
+        lowerScreenNumber = '';  
+        opSymbol = ''; 
+        setEquation(storedNumber, opSymbol, lowerScreenNumber, pressedEquals);
+    }else{
+        setEquation(storedNumber, opSymbol, lowerScreenNumber, pressedEquals);
+        lowerScreenNumber = answer;
+    }
 }
 
-storeActive = function(){
-    stored = active;
-    active = '';
+store = function(){
+    storedNumber = lowerScreenNumber;
+    lowerScreenNumber = '';
 }
 
 clearAll = function(){ 
-    stored = '';
-    active = ''; 
-    result = '';
+    storedNumber = '';
+    lowerScreenNumber = ''; 
+    equation = '';
     op = nothing;
 }
 
 clearCurrent = function(){
-    active = ''; 
+    lowerScreenNumber = ''; 
 }
 
 setOperator = function(func){
-    if(stored == ''){
-        storeActive();
-    }else if(active != ''){
+    if(storedNumber == ''){
+        store();
+    }else if(lowerScreenNumber != ''){
         operate();
     }
     op = func;
-    console.log("op = ", op);
+    opSymbol = getOpSymbol(func);
+    setEquation(storedNumber, opSymbol, lowerScreenNumber);
 }
 
 setSign = function(){
-    if(active[0] != '-'){
-        active = '-' + active;
+    if(lowerScreenNumber[0] != '-'){
+        lowerScreenNumber = '-' + lowerScreenNumber;
     }else{
-        active = active.slice(1);
+        lowerScreenNumber = lowerScreenNumber.slice(1);
+    }
+}
+
+getOpSymbol = function(func){
+    if(func == add){return ' + '};
+    if(func == subtract){return ' - '};
+    if(func == multiply){return ' x '};
+    if(func == divide){return ' / '};
+    return '';
+}
+
+setEquation = function(a, symbol, b, showEquals = false){ 
+    equation = a + symbol + b;
+    if(showEquals){
+        equation += ' = ';
     }
 }
 
 buildNumber = function(digit){
-    active += digit;
-    console.log(active);
+    lowerScreenNumber += digit;
 }
 
 deleteDigit = function(){
-    active = active.slice(0,-1);
+    lowerScreenNumber = lowerScreenNumber.slice(0,-1);
 }
 
