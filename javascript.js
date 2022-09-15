@@ -9,6 +9,7 @@ const lowerScreen = document.getElementById("lower");
 
 window.addEventListener('click',(event) => {
     updateScreen();
+    logMemory();
     console.log("click");
 })
 
@@ -16,7 +17,6 @@ var lowerScreenNumber = '';
 var storedNumber = '';
 var equation = '';
 var op = nothing;
-var opSymbol = '';
 
 updateScreen = function(){
     lowerScreen.textContent = lowerScreenNumber;
@@ -25,15 +25,17 @@ updateScreen = function(){
 
 operate = function(pressedEquals = false){
     let answer = String(op(Number(storedNumber), Number(lowerScreenNumber)));
+
     if(!pressedEquals){
         storedNumber = answer;
         lowerScreenNumber = '';  
-        opSymbol = ''; 
-        setEquation(storedNumber, opSymbol, lowerScreenNumber, pressedEquals);
+        setEquation(storedNumber, getOpSymbol(op), lowerScreenNumber, pressedEquals);
     }else{
-        setEquation(storedNumber, opSymbol, lowerScreenNumber, pressedEquals);
+        setEquation(storedNumber, getOpSymbol(op), lowerScreenNumber, pressedEquals);
         lowerScreenNumber = answer;
+        storedNumber = answer;
     }
+    op = nothing;
 }
 
 store = function(){
@@ -59,8 +61,7 @@ setOperator = function(func){
         operate();
     }
     op = func;
-    opSymbol = getOpSymbol(func);
-    setEquation(storedNumber, opSymbol, lowerScreenNumber);
+    setEquation(storedNumber, getOpSymbol(op), lowerScreenNumber);
 }
 
 setSign = function(){
@@ -79,11 +80,15 @@ getOpSymbol = function(func){
     return '';
 }
 
-setEquation = function(a, symbol, b, showEquals = false){ 
+setEquation = function(a = '', symbol = '', b = '', showEquals = false){ 
     equation = a + symbol + b;
     if(showEquals){
         equation += ' = ';
     }
+}
+
+logMemory = function(){
+    console.log("lsn = " + lowerScreenNumber + "\nstrd = " + storedNumber + "\neq = " + equation + "\nop = ", op);
 }
 
 buildNumber = function(digit){
