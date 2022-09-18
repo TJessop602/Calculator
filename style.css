@@ -1,4 +1,4 @@
-*{
+*{ 
     margin: 0;
     padding: 0;
 }
@@ -73,6 +73,12 @@ body{
 
 .button:hover{
     background-color: rgb(190, 190, 190);
+}
+
+.button:active{
+    background-color: rgb(150, 150, 150);
+    box-shadow: 0 1px 1px inset;
+    transition: 10ms;
 }
 
 .large{
