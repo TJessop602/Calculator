@@ -5,118 +5,129 @@ const divide = (a, b) => {
                         if(b == 0){error("Zero Divisor")}
                         else{return a / b};
                         }
-const nothing = (a, b) => a;
+const nothing = (a, b) => b;
 
 const upperScreen = document.getElementById("upper");
 const lowerScreen = document.getElementById("lower");
 
 const charLimit = 12;
 
-var lowerScreenNumber = '';
+var upperScreenDisplay = '';
+var lowerScreenDispaly = '';
 var storedNumber = '';
-var equation = '';
 var op = nothing;
 
-var equalsState = false;                                                                           //was the last button pressed equals?
+var lastPressEquals = false;                                                                       //was the last button pressed equals?
 var errorState = false;                                                                            //are we waiting for the user to clear an error?
 
 window.addEventListener('click',(event) => {
     if(!errorState){
-        updateScreen();                                                                            //if in errorState, no on-click updates will occur until clearAll is pressed
+        updateScreen();                                                                            //if in errorState, no automatic updates will occur
         logMemory();
     }
 })
 
 updateScreen = function(){
-    lowerScreen.textContent = lowerScreenNumber;                                               
-    upperScreen.textContent = equation;
+    lowerScreen.textContent = lowerScreenDispaly;                                               
+    upperScreen.textContent = upperScreenDisplay;
 }
 
 operate = function(pressedEquals = false){
-    let answer = (op(Number(storedNumber), Number(lowerScreenNumber)));                            //perform whatever operation is stored in op
-    answer = String(parseFloat((answer).toFixed(charLimit-2)));                                    //round decimals to fit to screen
+    let answer = (op(Number(storedNumber), Number(lowerScreenDispaly)));                            //perform whatever operation is stored in op
+    let nBeforeDecimal = (answer.toFixed(0)).length;                         
+    answer = String(parseFloat((answer).toFixed(Math.max(0,charLimit-nBeforeDecimal-1))));          //round decimals to fit to screen
     if(answer.length > charLimit){
         error("Too Long");
     }else{
-        if(pressedEquals && equalsState == true){
+        if(pressedEquals && lastPressEquals == true){
             return;                                                                                //Equals was previously pressed and was pressed again. Do nothing.
         }else if(pressedEquals){
-            setEquation(storedNumber, getOpSymbol(op), lowerScreenNumber, pressedEquals);          //if equals was pressed display answer below and equation above and set eq state.
-            lowerScreenNumber = answer;
+            setEquation(storedNumber, getOpSymbol(op), lowerScreenDispaly, pressedEquals);          //if equals was pressed display answer below and upperScreenDisplay above and set eq state.
+            lowerScreenDispaly = answer;
             storedNumber = answer;                                                                 //we need this is user wants to use answer as input for next calculation
-            equalsState = true;
+            lastPressEquals = true;
         }else{
-            storedNumber = answer;                                                                 //if another op button was pressed store input, update equation with partial answer and await the next number
-            lowerScreenNumber = '';  
-            setEquation(storedNumber, getOpSymbol(op), lowerScreenNumber, pressedEquals);
+            storedNumber = answer;                                                                 //if another op button was pressed store input, update upperScreenDisplay with partial answer and await the next number
+            lowerScreenDispaly = '';  
+            setEquation(storedNumber, getOpSymbol(op), lowerScreenDispaly, pressedEquals);
         }
         op = nothing;
     }
 }
 
 error = function(msg){
-    equation = "ERROR";                                                                             //replace screen display with error message and set errorState
-    lowerScreenNumber = msg;
+    upperScreenDisplay = "ERROR";                                                                   //replace screen display with error message and set errorState
+    lowerScreenDispaly = msg;
     errorState = true;
     updateScreen();                                                                                 //since we are in errorState, screen must be updated manually.
 }
 
+clearCurrent = function(){
+    if(lastPressEquals){
+        clearAll();
+    }else{
+        lowerScreenDispaly = '';
+    }
+}
+
 clearAll = function(){ 
     storedNumber = '';
-    lowerScreenNumber = ''; 
-    equation = '';
+    lowerScreenDispaly = ''; 
+    upperScreenDisplay = '';
     op = nothing;
     errorState = false;
-    equalsState = false;
+    lastPressEquals = false;
     updateScreen();                                                                                 //since we were in an errorState when the button was pressed a manual update is still required
 }
 
 store = function(){
-    storedNumber = lowerScreenNumber;
-    lowerScreenNumber = '';
+    storedNumber = lowerScreenDispaly;
+    lowerScreenDispaly = '';
 }
 
 setOperator = function(func){
-    equalsState = false;                                                                            //equals was pressed but user wants to use the answer as input for the next calculation. 
+    lastPressEquals = false;                                                                        //equals was pressed but user wants to use the answer as input for the next calculation. 
     if(storedNumber == ''){                                                                         //if we don't have a stored value, store input and await further input
         store();
-    }else if(lowerScreenNumber != ''){                                                              //If we have all the information to perform a calculation then we should do it before changing the operator
+    }else if(lowerScreenDispaly != ''){                                                              //If we have all the information to perform a calculation then we should do it before changing the operator
         operate();                                                                                  //Note: if equals was pressed the stored number is the previous answer, otherwise it is whatever the user input.
     }
     op = func;                                                                                      //Set the operator
-    setEquation(storedNumber, getOpSymbol(op), lowerScreenNumber);
+    setEquation(storedNumber, getOpSymbol(op), lowerScreenDispaly);
 }
 
 setSign = function(){
-    if(equalsState){                                                                                //if this function is called while in equalsState, start a new calculation.
+    if(lastPressEquals){                                                                             //if this function is called while lastPressEquals, start a new calculation.
         clearAll();
     }
-    if(lowerScreenNumber[0] != '-'){                                                                //if a - sign is not present, add one.
-        lowerScreenNumber = '-' + lowerScreenNumber;
+    if(lowerScreenDispaly[0] != '-'){                                                                //if a - sign is not present, add one.
+        lowerScreenDispaly = '-' + lowerScreenDispaly;
     }else{
-        lowerScreenNumber = lowerScreenNumber.slice(1);                                             //else if a - sign is present, remove it.
+        lowerScreenDispaly = lowerScreenDispaly.slice(1);                                             //else if a - sign is present, remove it.
     }
 }
 
 buildNumber = function(digit){
-    if(equalsState){                                                                                //if this function is called while in equalsState, start a new calculation.
+    if(lastPressEquals){                                                                                //if this function is called while lastPressEquals, start a new calculation.
         clearAll();
     }
-    if(lowerScreenNumber.length <= charLimit){
-        lowerScreenNumber += digit;
+    if(lowerScreenDispaly.length >= charLimit || (digit == '.' && lowerScreenDispaly.includes('.'))){   //only add digits if we have space. This isn't specially indicated to the user since it should be obvious
+        return;                                                                                         //that no further numbers are being added. Maybe add some indication?
     }else{
-        error("Too Long");
+        lowerScreenDispaly += digit;   
     }
 }
 
 deleteDigit = function(){
-    lowerScreenNumber = lowerScreenNumber.slice(0,-1);
+    lowerScreenDispaly = lowerScreenDispaly.slice(0,-1);
 }
 
 setEquation = function(a = '', symbol = '', b = '', showEquals = false){ 
-    equation = a + symbol + b;
+    if(a.slice(-1) == '.'){a = a.slice(0,-1)}                                                           //remove extrainious decimal points.
+    if(b.slice(-1) == '.'){b = b.slice(0,-1)}
+    upperScreenDisplay = a + symbol + b;
     if(showEquals){
-        equation += ' = ';
+        upperScreenDisplay += ' = ';
     }
 }
 
@@ -129,7 +140,7 @@ getOpSymbol = function(func){
 }
 
 logMemory = function(){
-    console.log("lsn = " + lowerScreenNumber + "\nstrd = " + storedNumber + "\neq = " + equation + "\nop = " + op + "\ne = " + errorState);     //for testing purposes
+    console.log("ls = " + lowerScreenDispaly + "\nstrd = " + storedNumber + "\nus = " + upperScreenDisplay + "\nop = " + op + "\ne = " + errorState);     //for testing purposes
 }
 
 
